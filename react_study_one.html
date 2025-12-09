@@ -391,4 +391,69 @@ npm run dev
 http://localhost:5173
 
 
+12월 10일 오전ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
+
+app.tsx 리액트 src 파일 수정 가능함.
+app.css도 수정 가능.
+
+npx serve -s build
+
+ㅡㅡㅡㅡㅡㅡㅡㅡ
+컴포넌트 만들기---------,,,,,,
+
+html에서 header 만들고,
+nav 만들고,
+article 본문용으로 하나 만들기.
+<li><a href="/read/1">html</a></li>
+
+app.js에
+
+import './App.css'
+function Header(){
+return <header>
+<h1><a href="/">WEB</a></h1>
+</header>
+}
+/*위와 같이 한 후에 아래 html 문서 내용에 <header></header> 적으면, header에 위 return 지시사항데로 생김.
+nav나 article도 가능한거..
+*/
+function App() {
+return (
+html 문서 내용
+)
+}
+
+export default App
+
+
+propsㅡㅡㅡㅡㅡㅡ
+리액트에서 속성은 prop
+
+예제
+import './App.css'
+function Header(props){
+console.log('props', props.title)
+return <header>
+<h1><a href="/">WEB</a></h1>
+/*WEB 대신에 {props.title}도 해보기*/
+</header>
+}
+
+function App(){
+return{
+<div>
+<Header title="REACT"></Header>
+<Nav></Nav>
+<Article title="Welcome" body="Hello, WEB"></Article>
+/*위에 function Article(props)로 해서 return 안에 {props.body} 넣어서 만들기
+Article 하나 더 추가해 보기도 하기.
+https://www.youtube.com/watch?v=t9e3hMJ_s-c&list=PLuHgQVnccGMCOGstdDZvH41x0Vtvwyxu7&index=5
+3분 58초까지 봄..
+*/
+</div>
+}
+}
+
+
+
 -->
