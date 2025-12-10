@@ -459,5 +459,34 @@ https://www.youtube.com/watch?v=t9e3hMJ_s-c&list=PLuHgQVnccGMCOGstdDZvH41x0Vtvwy
 
 -->
 
+
+컴포넌트 ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
+
 https://ko.legacy.reactjs.org/docs/components-and-props.html
+
+
+
+
+interface WelcomeProps {
+  name: string;
+}
+
+function Welcome(props: WelcomeProps) {
+  return <h1>안녕, {props.name}</h1>
+}
+
+function App() {
+  return (
+    <div>
+      <Welcome name="groom" />
+      <Welcome name="groomi" />
+    </div>
+  )
+}
+
+export default App
+
+
+
+
 
