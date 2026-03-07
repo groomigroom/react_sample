@@ -1,168 +1,75 @@
-# react_sample
-react 연습 샘플입니다.
+# React + TypeScript + Vite
 
-https://ko.javascript.info/import-export
-자바스크립트 인포
+This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
-export default 키워드: #####
+Currently, two official plugins are available:
 
-function MyButton(){
-return(
-<button>구름이</button>
-)
-}
-/*
-React 컴포넌트는 마크업을 반환하는 자바스크립트 함수입니다.
-마크업(Markup)은 문서의 구조나 서식을 지정하기 위해 태그를 삽입하는 행위(마크업 언어)이다.
-*/
+- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
+- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
 
-function MyButton() {
-  return (
-    <button>
-     구름구름
-    </button>
-  );
-}
+## React Compiler
 
-export default function MyApp() {
-  return (
-    <div>
-      <h1>구름이는 멍멍이</h1>
-      <MyButton />
-    </div>
-  );
-}
-/*위와 같이 다른 컴포넌트에 중첩 가능함.*/
+The React Compiler is enabled on this template. See [this documentation](https://react.dev/learn/react-compiler) for more information.
 
-스타일 추가하기ㅡㅡㅡㅡㅡㅡㅡㅡ
+Note: This will impact Vite dev & build performances.
 
-<img className="avatar" />
+## Expanding the ESLint configuration
 
-그 다음 별도의 CSS 파일에 해당 CSS 규칙을 작성합니다.
+If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
 
-/* In your CSS */
-.avatar {
-  border-radius: 50%;
-}
+```js
+export default defineConfig([
+  globalIgnores(['dist']),
+  {
+    files: ['**/*.{ts,tsx}'],
+    extends: [
+      // Other configs...
 
-데이터 표시하기 ㅡㅡㅡㅡㅡㅡㅡ
+      // Remove tseslint.configs.recommended and replace with this
+      tseslint.configs.recommendedTypeChecked,
+      // Alternatively, use this for stricter rules
+      tseslint.configs.strictTypeChecked,
+      // Optionally, add this for stylistic rules
+      tseslint.configs.stylisticTypeChecked,
 
-return (
-  <h1>
-    {user.name}
-  </h1>
-);
+      // Other configs...
+    ],
+    languageOptions: {
+      parserOptions: {
+        project: ['./tsconfig.node.json', './tsconfig.app.json'],
+        tsconfigRootDir: import.meta.dirname,
+      },
+      // other options...
+    },
+  },
+])
+```
 
-ㅡㅡㅡㅡㅡ
+You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
 
-return (
-  <img
-    className="avatar"
-    src={user.imageUrl}
-  />
-);
+```js
+// eslint.config.js
+import reactX from 'eslint-plugin-react-x'
+import reactDom from 'eslint-plugin-react-dom'
 
-ㅡㅡㅡㅡㅡㅡㅡㅡㅡ
-
-const user = {
-  name: 'Hedy Lamarr',
-  imageUrl: 'https://i.imgur.com/yXOvdOSs.jpg',
-  imageSize: 120,
-};
-
-export default function Profile() {
-  return (
-    <>
-      <h1>{user.name}</h1>
-      <img
-        className="avatar"
-        src={user.imageUrl}
-        alt={'Photo of ' + user.name}
-        style={{
-          width: user.imageSize,
-          height: user.imageSize
-        }}
-      />
-    </>
-  );
-}
-
-
-조건부 렌더링ㅡㅡㅡㅡㅡㅡㅡㅡㅡ
-
-let content;
-if (isLoggedIn) {
-  content = <AdminPanel />;
-} else {
-  content = <LoginForm />;
-}
-return (
-  <div>
-    {content}
-  </div>
-);
-
-ㅡㅡㅡㅡㅡㅡㅡㅡㅡ
-
-<div>
-  {isLoggedIn ? (
-    <AdminPanel />
-  ) : (
-    <LoginForm />
-  )}
-</div>
-
-
-ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
-<div>
-  {isLoggedIn && <AdminPanel />}
-</div>
-
-
-ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
-리스트 렌더링하기
-const puppys = [
-{title: 'groom', id: 1},
-{title: 'groomee', id: 2},
-{title: 'groomeeh', id: 3},
-];
-
-const listItems = products.map(puppy =>
-<li key={puppy.id}>
-{product.title}
-</li>
-);
-
-return(
-<ul>{listItems}</ul>
-);
-
-
-ㅡㅡㅡㅡㅡㅡㅡ
-
-const puppys = [
-  { title: 'groom', isBingu: true, id: 1 },
-  { title: '김구름이', isBingu: false, id: 2 },
-  { title: '구름구름이', isBingu: true, id: 3 },
-];
-
-export default function ShoppingList() {
-  const listItems = puppys.map(puppy =>
-    <li
-      key={puppy.id}
-      style={{
-        color: puppy.isBingu ? 'magenta' : 'darkgreen'
-      }}
-    >
-      {puppy.title}
-    </li>
-  );
-
-  return (
-    <ul>{listItems}</ul>
-  );
-}
-
-
-ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
-
+export default defineConfig([
+  globalIgnores(['dist']),
+  {
+    files: ['**/*.{ts,tsx}'],
+    extends: [
+      // Other configs...
+      // Enable lint rules for React
+      reactX.configs['recommended-typescript'],
+      // Enable lint rules for React DOM
+      reactDom.configs.recommended,
+    ],
+    languageOptions: {
+      parserOptions: {
+        project: ['./tsconfig.node.json', './tsconfig.app.json'],
+        tsconfigRootDir: import.meta.dirname,
+      },
+      // other options...
+    },
+  },
+])
+```
