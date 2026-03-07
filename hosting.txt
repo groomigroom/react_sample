@@ -1,0 +1,275 @@
+github codespace로 vite react 프로젝트를 만들었는데, 이 프로젝트가 리포지트리의 폴더 안에 있는데, 이 프로젝트를 github pages로 호스팅하는 법? 
+
+Vite로 만든 React 프로젝트가 리포지토리 안의 하위 폴더에 있을 때도 **GitHub Pages**로 호스팅할 수 있습니다. 핵심은 빌드 → gh-pages 브랜치에 업로드입니다. 아래 순서대로 하면 됩니다.
+
+1️⃣ gh-pages 패키지 설치
+
+먼저 Codespaces 터미널에서 프로젝트 폴더 안으로 이동합니다.
+
+cd 프로젝트폴더
+
+그 다음 설치
+
+npm install gh-pages --save-dev
+2️⃣ package.json 수정
+
+package.json에 homepage와 scripts를 추가합니다.
+
+{
+  "homepage": "https://깃허브아이디.github.io/레포지토리이름",
+
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "deploy": "gh-pages -d dist"
+  }
+}
+
+예시
+
+"homepage": "https://username.github.io/react_sample"
+3️⃣ Vite 설정 수정
+
+Vite 프로젝트는 base 경로 설정이 필요합니다.
+
+vite.config.js
+
+import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react'
+
+export default defineConfig({
+  plugins: [react()],
+  base: '/레포지토리이름/'
+})
+
+예
+
+base: '/react_sample/'
+4️⃣ 빌드
+npm run build
+
+그러면
+
+dist
+
+폴더가 생성됩니다.
+
+5️⃣ GitHub Pages 배포
+
+이제 배포
+
+npm run deploy
+
+그러면 자동으로
+
+gh-pages 브랜치
+
+가 생성됩니다.
+
+6️⃣ GitHub Pages 설정
+
+GitHub 리포지토리 접속
+
+Settings → Pages
+
+Source 선택
+
+Deploy from a branch
+
+브랜치
+
+gh-pages
+
+폴더
+
+/ (root)
+7️⃣ 접속 주소
+
+배포되면
+
+https://아이디.github.io/레포지토리/
+
+에서 접속됩니다.
+
+⚠️ 리포지토리 안 폴더에 있을 때 주의
+
+예를 들어 구조가
+
+repo
+ ├ vite-project
+ │   ├ src
+ │   ├ package.json
+ │   └ vite.config.js
+
+이면 반드시
+
+cd vite-project
+
+에서
+
+npm run deploy
+
+해야 합니다.
+
+🚀 Codespaces에서 바로 배포 명령
+cd vite-project
+npm install
+npm run build
+npm run deploy
+
+💡 원하시면 제가 Vite + React를 GitHub Pages에 올릴 때 가장 많이 생기는 오류 5가지 (404, CSS 안나옴 등)도 정리해 드리겠습니다.
+이거 처음 하면 거의 90%가 한 번은 막히는 부분입니다.
+
+package.json에 이미 script에 "dev": "vite",
+    "build": "tsc -b && vite build",
+    "lint": "eslint .",
+    "preview": "vite preview"가 있는데
+
+이미 package.json에 scripts가 있다면 기존 것을 지울 필요는 없고 deploy만 추가하면 됩니다.
+즉, 기존 스크립트에 한 줄만 더 넣는 방식입니다.
+
+예를 들어 현재 package.json이 이런 상태라면:
+
+"scripts": {
+  "dev": "vite",
+  "build": "tsc -b && vite build",
+  "lint": "eslint .",
+  "preview": "vite preview"
+}
+
+여기에 deploy만 추가합니다.
+
+"scripts": {
+  "dev": "vite",
+  "build": "tsc -b && vite build",
+  "lint": "eslint .",
+  "preview": "vite preview",
+  "deploy": "gh-pages -d dist"
+}
+
+그리고 homepage도 추가합니다.
+
+{
+  "homepage": "https://깃허브아이디.github.io/레포지토리이름"
+}
+
+예시 전체 구조:
+
+{
+  "homepage": "https://username.github.io/react_sample",
+
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "lint": "eslint .",
+    "preview": "vite preview",
+    "deploy": "gh-pages -d dist"
+  }
+}
+그 다음 실행 순서
+
+Codespaces 터미널에서
+
+npm install gh-pages --save-dev
+
+빌드
+
+npm run build
+
+배포
+
+npm run deploy
+그리고 매우 중요한 설정 (Vite 프로젝트 필수)
+
+vite.config.ts 또는 vite.config.js에서 base 설정을 해야 합니다.
+
+export default defineConfig({
+  plugins: [react()],
+  base: '/레포지토리이름/'
+})
+
+예
+
+base: '/react_sample/'
+
+이거 안 하면 GitHub Pages에서 CSS / JS가 404 에러 납니다.
+
+💡 추가로 하나 중요한 점이 있습니다.
+지금 말한 프로젝트가 "리포지토리 안의 폴더"에 있다면 배포 방법이 두 가지로 나뉩니다.
+
+1️⃣ 지금 설명한 방법 (가장 쉬움)
+→ 폴더 안에서 gh-pages로 배포
+
+2️⃣ GitHub Actions로 자동 배포 (요즘 더 많이 씀)
+
+원하시면 Vite + React를 GitHub Pages에 올리는 가장 안정적인 방법 (3분 설정)도 알려드리겠습니다.
+이 방법은 build → push 하면 자동 배포됩니다.
+
+vite.config.ts가 원래 import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react'
+
+// https://vite.dev/config/
+export default defineConfig({
+  plugins: [
+    react({
+      babel: {
+        plugins: [['babel-plugin-react-compiler']],
+      },
+    }),
+  ],
+}) 이렇게 되어 있는데, base 경로 설정하는 법?
+
+현재 vite.config.ts에 옵션 하나만 추가하면 됩니다.
+defineConfig 안에 base 속성을 넣으면 됩니다.
+
+예를 들어 리포지토리 이름이 react_sample이라면 이렇게 수정합니다.
+
+import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react'
+
+// https://vite.dev/config/
+export default defineConfig({
+  base: '/react_sample/',   // ← 이 줄 추가
+  plugins: [
+    react({
+      babel: {
+        plugins: [['babel-plugin-react-compiler']],
+      },
+    }),
+  ],
+})
+구조 설명
+export default defineConfig({
+  base: '/레포지토리이름/',
+  plugins: [...]
+})
+
+⚠️ 반드시 /레포지토리이름/ 형태로 앞뒤 슬래시가 있어야 합니다.
+
+예시
+
+GitHub Repository	base 설정
+my-vite-app	/my-vite-app/
+react_sample	/react_sample/
+portfolio	/portfolio/
+설정 후 배포 순서
+
+1️⃣ 빌드
+
+npm run build
+
+2️⃣ 배포
+
+npm run deploy
+
+그러면 **GitHub Pages**에서
+
+https://깃허브아이디.github.io/레포지토리이름/
+
+으로 접속됩니다.
+
+💡 추가로 매우 중요한 것 하나
+React Router를 쓰면 GitHub Pages에서 새로고침 시 404 오류가 나는 경우가 있습니다.
+
+혹시 프로젝트에서 React Router (BrowserRouter) 사용하고 있나요?
+사용 중이면 GitHub Pages용 설정을 하나 더 해줘야 합니다.
